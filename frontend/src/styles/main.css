@@ -1,0 +1,185 @@
+:root {
+  font-family: "Segoe UI", "PingFang SC", sans-serif;
+  color: #182028;
+  background:
+    radial-gradient(circle at top left, rgba(255, 210, 168, 0.6), transparent 30%),
+    linear-gradient(135deg, #f6f1e8, #eef4f3 45%, #dde9f3);
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  background: #0f766e;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+button.secondary {
+  background: #dbe6e5;
+  color: #183131;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid #c9d8d7;
+  border-radius: 12px;
+  padding: 0.75rem 0.875rem;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.shell {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: stretch;
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.82rem;
+  color: #0f766e;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+.lead {
+  max-width: 680px;
+  color: #425769;
+}
+
+.hero-card,
+.panel {
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 24px;
+  box-shadow: 0 18px 50px rgba(24, 32, 40, 0.08);
+}
+
+.hero-card {
+  min-width: 220px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.panel {
+  padding: 1.25rem;
+}
+
+.panel-head h2,
+.panel-head p {
+  margin: 0;
+}
+
+.panel-head p {
+  margin-top: 0.35rem;
+  color: #546373;
+}
+
+.panel-body,
+.stack,
+.list {
+  margin-top: 1rem;
+}
+
+.stack {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.list {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.notice {
+  border-radius: 10px;
+  margin: 0.8rem 0 0;
+  padding: 0.75rem 0.85rem;
+}
+
+.notice.success {
+  background: #e5f6ef;
+  color: #0f5f46;
+}
+
+.notice.error {
+  background: #fde8e8;
+  color: #9b1c1c;
+}
+
+.list li {
+  border-radius: 16px;
+  background: rgba(244, 248, 248, 0.88);
+  padding: 0.9rem 1rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.muted {
+  color: #5c7183;
+  margin-top: 0.4rem;
+}
+
+@media (max-width: 900px) {
+  .hero,
+  .grid {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .hero-card {
+    min-width: 0;
+  }
+}
