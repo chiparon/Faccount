@@ -1,20 +1,31 @@
 <template>
-  <Panel title="账户管理" description="新增和查看资金账户。">
-    <form class="stack" @submit.prevent="submitAccount">
-      <input v-model.trim="form.name" placeholder="账户名称，如 微信零钱" />
-      <input v-model.trim="form.type" placeholder="账户类型，如 e-wallet / bank" />
+  <Panel title="账户管理" kicker="Accounts" description="新增和查看资金账户">
+    <div class="account-list">
+      <article v-for="item in accounts" :key="item.id" class="account-card">
+        <div class="account-avatar">{{ item.name.slice(0, 1) }}</div>
+        <div>
+          <strong>{{ item.name }}</strong>
+          <span>{{ item.type }}</span>
+        </div>
+        <button class="danger-link" type="button" @click="deleteAccount(item)">删除</button>
+      </article>
+      <p v-if="!accounts.length && !error" class="empty-state">暂无账户，请先新增一个资金账户。</p>
+    </div>
+
+    <form class="stack compact-form divider-top" @submit.prevent="submitAccount">
+      <label>
+        <span>账户名称</span>
+        <input v-model.trim="form.name" placeholder="如 微信零钱" />
+      </label>
+      <label>
+        <span>账户类型</span>
+        <input v-model.trim="form.type" placeholder="如 e-wallet / bank" />
+      </label>
       <button type="submit" :disabled="loading">{{ loading ? "提交中..." : "新增账户" }}</button>
     </form>
 
     <p v-if="message" class="notice success">{{ message }}</p>
     <p v-if="error" class="notice error">{{ error }}</p>
-
-    <ul class="list">
-      <li v-for="item in accounts" :key="item.id">
-        <strong>{{ item.name }}</strong>
-        <span>{{ item.type }}</span>
-      </li>
-    </ul>
   </Panel>
 </template>
 
@@ -65,4 +76,21 @@ async function submitAccount() {
 }
 
 onMounted(loadAccounts);
+
+async function deleteAccount(item) {
+  if (!window.confirm(`确认删除账户「${item.name}」吗？已被流水使用的账户不能删除。`)) {
+    return;
+  }
+
+  try {
+    error.value = "";
+    message.value = "";
+    await api.deleteAccount(item.id);
+    message.value = "账户已删除";
+    await loadAccounts();
+    window.dispatchEvent(new CustomEvent("accounts-updated"));
+  } catch (err) {
+    error.value = `删除账户失败：${err.message}`;
+  }
+}
 </script>

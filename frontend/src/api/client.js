@@ -22,7 +22,22 @@ async function request(path, options = {}) {
     }
   }
 
+  if (response.status === 204) {
+    return null;
+  }
+
   return response.json();
+}
+
+function withQuery(path, params = {}) {
+  const searchParams = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      searchParams.set(key, value);
+    }
+  });
+  const queryString = searchParams.toString();
+  return queryString ? `${path}?${queryString}` : path;
 }
 
 export const api = {
@@ -35,6 +50,11 @@ export const api = {
       body: JSON.stringify(payload),
     });
   },
+  deleteAccount(id) {
+    return request(`/accounts/${id}`, {
+      method: "DELETE",
+    });
+  },
   listCategories() {
     return request("/categories");
   },
@@ -44,13 +64,23 @@ export const api = {
       body: JSON.stringify(payload),
     });
   },
-  listTransactions() {
-    return request("/transactions");
+  deleteCategory(id) {
+    return request(`/categories/${id}`, {
+      method: "DELETE",
+    });
+  },
+  listTransactions(params = {}) {
+    return request(withQuery("/transactions", params));
   },
   createTransaction(payload) {
     return request("/transactions", {
       method: "POST",
       body: JSON.stringify(payload),
+    });
+  },
+  deleteTransaction(id) {
+    return request(`/transactions/${id}`, {
+      method: "DELETE",
     });
   },
 };

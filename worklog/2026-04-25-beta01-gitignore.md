@@ -17,3 +17,8 @@
 ## Remaining
 - Before publishing, run `git status --ignored --short` once more.
 - Git currently reports a repository ownership mismatch unless using `git -c safe.directory=E:/Eproject/accounts ...` or configuring `safe.directory` globally.
+
+## Git Record Supplement
+- Current Git version: `git version 2.49.0.windows.1`.
+- Current branch state: `main...origin/main`.
+- Current commit: `9786f8b (HEAD -> main, origin/main) chore: beta0.1 initial project snapshot`.

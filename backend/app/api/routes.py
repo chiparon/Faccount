@@ -1,6 +1,7 @@
-from typing import List
+from datetime import datetime
+from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
@@ -36,6 +37,28 @@ def create_account(payload: AccountCreate, db: Session = Depends(get_db)):
     return record
 
 
+@router.delete("/accounts/{account_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_account(account_id: int, db: Session = Depends(get_db)):
+    record = db.query(Account).filter(Account.id == account_id).first()
+    if not record:
+        raise HTTPException(status_code=404, detail="account not found")
+
+    linked_transaction = (
+        db.query(TransactionRecord)
+        .filter(
+            (TransactionRecord.from_account_id == account_id)
+            | (TransactionRecord.to_account_id == account_id)
+        )
+        .first()
+    )
+    if linked_transaction:
+        raise HTTPException(status_code=409, detail="account is used by transactions")
+
+    db.delete(record)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
 @router.get("/categories", response_model=List[CategoryRead])
 def list_categories(db: Session = Depends(get_db)):
     return db.query(Category).order_by(Category.sort_order.asc(), Category.id.asc()).all()
@@ -61,9 +84,63 @@ def create_category(payload: CategoryCreate, db: Session = Depends(get_db)):
     return record
 
 
+@router.delete("/categories/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_category(category_id: int, db: Session = Depends(get_db)):
+    record = db.query(Category).filter(Category.id == category_id).first()
+    if not record:
+        raise HTTPException(status_code=404, detail="category not found")
+
+    child = db.query(Category).filter(Category.parent_id == category_id).first()
+    if child:
+        raise HTTPException(status_code=409, detail="category has child categories")
+
+    linked_transaction = (
+        db.query(TransactionRecord)
+        .filter(TransactionRecord.category_id == category_id)
+        .first()
+    )
+    if linked_transaction:
+        raise HTTPException(status_code=409, detail="category is used by transactions")
+
+    db.delete(record)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
 @router.get("/transactions", response_model=List[TransactionRead])
-def list_transactions(db: Session = Depends(get_db)):
-    return db.query(TransactionRecord).order_by(TransactionRecord.occurred_at.desc()).all()
+def list_transactions(
+    start_at: Optional[datetime] = None,
+    end_at: Optional[datetime] = None,
+    transaction_type: Optional[str] = None,
+    category_id: Optional[int] = None,
+    account_id: Optional[int] = None,
+    sort_by: str = Query("occurred_at", regex="^(occurred_at|amount|created_at|id)$"),
+    sort_order: str = Query("desc", regex="^(asc|desc)$"),
+    db: Session = Depends(get_db),
+):
+    query = db.query(TransactionRecord)
+
+    if start_at:
+        query = query.filter(TransactionRecord.occurred_at >= start_at)
+    if end_at:
+        query = query.filter(TransactionRecord.occurred_at <= end_at)
+    if transaction_type:
+        query = query.filter(TransactionRecord.transaction_type == transaction_type)
+    if category_id:
+        query = query.filter(TransactionRecord.category_id == category_id)
+    if account_id:
+        query = query.filter(
+            (TransactionRecord.from_account_id == account_id)
+            | (TransactionRecord.to_account_id == account_id)
+        )
+
+    sort_column = getattr(TransactionRecord, sort_by)
+    if sort_order == "asc":
+        query = query.order_by(sort_column.asc(), TransactionRecord.id.asc())
+    else:
+        query = query.order_by(sort_column.desc(), TransactionRecord.id.desc())
+
+    return query.all()
 
 
 @router.post(
@@ -94,3 +171,14 @@ def create_transaction(payload: TransactionCreate, db: Session = Depends(get_db)
     db.commit()
     db.refresh(record)
     return record
+
+
+@router.delete("/transactions/{transaction_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_transaction(transaction_id: int, db: Session = Depends(get_db)):
+    record = db.query(TransactionRecord).filter(TransactionRecord.id == transaction_id).first()
+    if not record:
+        raise HTTPException(status_code=404, detail="transaction not found")
+
+    db.delete(record)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

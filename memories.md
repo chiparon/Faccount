@@ -15,3 +15,6 @@
 - 前端命令可使用 DevEco Node：`E:\Program Files\Huawei\DevEco Studio\tools\node\npm.cmd`。
 - 当前联调状态：账户新增、分类新增、支出流水新增链路已跑通；分类父级、流水分类、来源账户、目标账户已改为下拉选择。
 - 电脑重启后启动项目：确认/启动 MySQL80；项目根目录启动 FastAPI；另开终端进入 `frontend/` 启动 Vite。
+
+- beta0.2 已完成：前端完成 AI Studio 参考页面风格迁移，保持 Vue 3 + Vite 技术栈；新增账户、分类、流水删除功能；流水支持按时间起止、类型、分类、账户筛选，并支持按时间、金额、创建时间、编号排序；新增月度流水总览视图。
+- beta0.2 验证状态：后端测试 `5 passed`，前端 `npm run build` 通过；删除目前为物理删除，后续如需恢复/审计应改软删除。
