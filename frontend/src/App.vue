@@ -14,7 +14,7 @@
           </div>
           <h1>个人账目记录应用</h1>
           <p class="lead">
-            围绕账户、分类、流水三类核心数据，先完成一个稳定可用的个人账本闭环。重新设计的现代化界面，让数据关系更清晰。
+            将流水查看、记账编辑、月度复盘、导入整理和恢复操作拆成独立视图，降低单屏信息压力。
           </p>
         </div>
 
@@ -25,26 +25,84 @@
         </div>
       </header>
 
-      <main class="dashboard-grid">
-        <section class="main-column">
+      <nav class="page-tabs" aria-label="功能分页">
+        <button
+          v-for="page in pages"
+          :key="page.key"
+          type="button"
+          :class="{ active: activePage === page.key }"
+          @click="activePage = page.key"
+        >
+          <span>{{ page.label }}</span>
+        </button>
+      </nav>
+
+      <main class="page-shell">
+        <section v-show="activePage === 'transactions'" class="page-panel">
           <TransactionsPage />
-          <MonthlyTransactionsPage />
+        </section>
+
+        <section v-show="activePage === 'entry'" class="page-panel">
           <TransactionEntryPage />
         </section>
 
-        <aside class="side-column">
+        <section v-show="activePage === 'monthly'" class="page-panel">
+          <MonthlyTransactionsPage />
+        </section>
+
+        <section v-show="activePage === 'flow'" class="page-panel">
+          <BudgetFlowPage />
+        </section>
+
+        <section v-show="activePage === 'import'" class="page-panel">
+          <ImportCachePage />
+        </section>
+
+        <section v-show="activePage === 'trash'" class="page-panel">
+          <TrashPage />
+        </section>
+
+        <section v-show="activePage === 'manage'" class="page-panel management-grid">
           <AccountsPage />
           <CategoriesPage />
-        </aside>
+        </section>
       </main>
     </div>
   </div>
 </template>
 
 <script setup>
+import { onMounted, onUnmounted, ref } from "vue";
 import AccountsPage from "./pages/AccountsPage.vue";
+import BudgetFlowPage from "./pages/BudgetFlowPage.vue";
 import CategoriesPage from "./pages/CategoriesPage.vue";
+import ImportCachePage from "./pages/ImportCachePage.vue";
 import MonthlyTransactionsPage from "./pages/MonthlyTransactionsPage.vue";
 import TransactionEntryPage from "./pages/TransactionEntryPage.vue";
 import TransactionsPage from "./pages/TransactionsPage.vue";
+import TrashPage from "./pages/TrashPage.vue";
+
+const pages = [
+  { key: "transactions", label: "流水" },
+  { key: "entry", label: "记一笔/编辑" },
+  { key: "monthly", label: "月度总览" },
+  { key: "flow", label: "预算流转" },
+  { key: "import", label: "账单导入" },
+  { key: "trash", label: "Trash" },
+  { key: "manage", label: "基础管理" },
+];
+
+const activePage = ref("transactions");
+
+function openEditorPage() {
+  activePage.value = "entry";
+}
+
+onMounted(() => {
+  window.addEventListener("transaction-edit-requested", openEditorPage);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("transaction-edit-requested", openEditorPage);
+});
 </script>

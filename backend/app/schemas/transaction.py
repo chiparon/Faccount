@@ -1,10 +1,29 @@
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import BaseModel, Field, root_validator
 
 from app.schemas.common import TransactionKind
+
+
+class TransactionItemBase(BaseModel):
+    title: str = Field(..., min_length=1, max_length=100)
+    amount: Decimal = Field(..., gt=0)
+    category_id: Optional[int] = None
+    note: Optional[str] = Field(default=None, max_length=255)
+
+
+class TransactionItemCreate(TransactionItemBase):
+    pass
+
+
+class TransactionItemRead(TransactionItemBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
 
 
 class TransactionBase(BaseModel):
@@ -16,6 +35,8 @@ class TransactionBase(BaseModel):
     from_account_id: Optional[int] = None
     to_account_id: Optional[int] = None
     note: Optional[str] = Field(default=None, max_length=255)
+    source_logic: Optional[str] = Field(default=None, max_length=100)
+    items: List[TransactionItemCreate] = Field(default_factory=list)
 
 
 class TransactionCreate(TransactionBase):
@@ -39,9 +60,16 @@ class TransactionCreate(TransactionBase):
         return values
 
 
+class TransactionUpdate(TransactionCreate):
+    pass
+
+
 class TransactionRead(TransactionBase):
     id: int
     created_at: datetime
+    updated_at: Optional[datetime] = None
+    deleted_at: Optional[datetime] = None
+    items: List[TransactionItemRead] = Field(default_factory=list)
 
     class Config:
         orm_mode = True

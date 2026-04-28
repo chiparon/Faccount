@@ -1,5 +1,6 @@
 from sqlalchemy import Column, DateTime, ForeignKey, Numeric, String, Text, func
 from sqlalchemy.dialects.mysql import BIGINT
+from sqlalchemy.orm import relationship
 
 from app.core.db import Base
 
@@ -16,5 +17,28 @@ class TransactionRecord(Base):
     from_account_id = Column(BIGINT, ForeignKey("account.id"), nullable=True)
     to_account_id = Column(BIGINT, ForeignKey("account.id"), nullable=True)
     note = Column(Text, nullable=True)
+    source_logic = Column(String(100), nullable=True)
+    created_at = Column(DateTime, nullable=False, server_default=func.now())
+    updated_at = Column(DateTime, nullable=True)
+    deleted_at = Column(DateTime, nullable=True)
+
+    items = relationship(
+        "TransactionItem",
+        cascade="all, delete-orphan",
+        back_populates="transaction",
+        order_by="TransactionItem.id.asc()",
+    )
+
+
+class TransactionItem(Base):
+    __tablename__ = "transaction_item"
+
+    id = Column(BIGINT, primary_key=True, autoincrement=True)
+    transaction_id = Column(BIGINT, ForeignKey("transaction_record.id"), nullable=False)
+    title = Column(String(100), nullable=False)
+    amount = Column(Numeric(10, 2), nullable=False)
+    category_id = Column(BIGINT, ForeignKey("category.id"), nullable=True)
+    note = Column(Text, nullable=True)
     created_at = Column(DateTime, nullable=False, server_default=func.now())
 
+    transaction = relationship("TransactionRecord", back_populates="items")

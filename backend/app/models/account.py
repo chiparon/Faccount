@@ -11,4 +11,4 @@ class Account(Base):
     name = Column(String(50), unique=True, nullable=False)
     type = Column(String(30), nullable=False)
     created_at = Column(DateTime, nullable=False, server_default=func.now())
-
+    deleted_at = Column(DateTime, nullable=True)
