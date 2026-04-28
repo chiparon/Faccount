@@ -1,6 +1,5 @@
 from app.models.account import Account
 from app.models.category import Category
-from app.models.transaction import TransactionRecord
+from app.models.transaction import TransactionItem, TransactionRecord
 
-__all__ = ["Account", "Category", "TransactionRecord"]
-
+__all__ = ["Account", "Category", "TransactionItem", "TransactionRecord"]

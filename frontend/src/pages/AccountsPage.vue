@@ -1,5 +1,5 @@
 <template>
-  <Panel title="账户管理" kicker="Accounts" description="新增和查看资金账户">
+  <Panel title="账户管理" kicker="Accounts" description="新增、查看和移入 Trash 资金账户">
     <div class="account-list">
       <article v-for="item in accounts" :key="item.id" class="account-card">
         <div class="account-avatar">{{ item.name.slice(0, 1) }}</div>
@@ -75,10 +75,8 @@ async function submitAccount() {
   }
 }
 
-onMounted(loadAccounts);
-
 async function deleteAccount(item) {
-  if (!window.confirm(`确认删除账户「${item.name}」吗？已被流水使用的账户不能删除。`)) {
+  if (!window.confirm(`确认删除账户「${item.name}」吗？删除后会进入 Trash，可恢复。`)) {
     return;
   }
 
@@ -86,11 +84,13 @@ async function deleteAccount(item) {
     error.value = "";
     message.value = "";
     await api.deleteAccount(item.id);
-    message.value = "账户已删除";
+    message.value = "账户已移入 Trash";
     await loadAccounts();
     window.dispatchEvent(new CustomEvent("accounts-updated"));
   } catch (err) {
     error.value = `删除账户失败：${err.message}`;
   }
 }
+
+onMounted(loadAccounts);
 </script>

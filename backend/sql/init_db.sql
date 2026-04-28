@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS account (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE,
     type VARCHAR(30) NOT NULL,
-    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    deleted_at DATETIME NULL
 );
 
 CREATE TABLE IF NOT EXISTS category (
@@ -16,6 +17,7 @@ CREATE TABLE IF NOT EXISTS category (
     is_active TINYINT(1) NOT NULL DEFAULT 1,
     sort_order INT NOT NULL DEFAULT 0,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    deleted_at DATETIME NULL,
     CONSTRAINT fk_category_parent FOREIGN KEY (parent_id) REFERENCES category(id)
 );
 
@@ -29,9 +31,23 @@ CREATE TABLE IF NOT EXISTS transaction_record (
     from_account_id BIGINT NULL,
     to_account_id BIGINT NULL,
     note VARCHAR(255) NULL,
+    source_logic VARCHAR(100) NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NULL,
+    deleted_at DATETIME NULL,
     CONSTRAINT fk_transaction_category FOREIGN KEY (category_id) REFERENCES category(id),
     CONSTRAINT fk_transaction_from_account FOREIGN KEY (from_account_id) REFERENCES account(id),
     CONSTRAINT fk_transaction_to_account FOREIGN KEY (to_account_id) REFERENCES account(id)
 );
 
+CREATE TABLE IF NOT EXISTS transaction_item (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    transaction_id BIGINT NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    category_id BIGINT NULL,
+    note VARCHAR(255) NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_transaction_item_transaction FOREIGN KEY (transaction_id) REFERENCES transaction_record(id),
+    CONSTRAINT fk_transaction_item_category FOREIGN KEY (category_id) REFERENCES category(id)
+);

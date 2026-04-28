@@ -181,6 +181,54 @@ label span {
   gap: clamp(1.25rem, 2vw, 2rem);
 }
 
+.page-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.2rem;
+  padding: 0.45rem;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.page-tabs button {
+  flex: 0 0 auto;
+  border-radius: 0.9rem;
+  padding: 0.72rem 0.95rem;
+  background: transparent;
+  color: #64748b;
+  font-size: 0.88rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.page-tabs button.active {
+  background: #0f172a;
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.14);
+}
+
+.page-shell {
+  min-width: 0;
+}
+
+.page-panel {
+  min-width: 0;
+}
+
+.management-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1rem, 2vw, 1.5rem);
+  align-items: start;
+}
+
 .panel {
   display: flex;
   flex-direction: column;
@@ -233,6 +281,11 @@ label span {
   color: #2563eb;
   font-size: 0.8rem;
   font-weight: 800;
+}
+
+.ghost-button.mini {
+  padding: 0.34rem 0.58rem;
+  font-size: 0.74rem;
 }
 
 .danger-link {
@@ -324,6 +377,12 @@ label span {
   background: #f8fafc;
 }
 
+.quick-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 0.75rem;
+}
+
 .filter-submit {
   align-self: end;
   border-radius: 12px;
@@ -382,6 +441,77 @@ label span {
   padding: 1rem;
   background: #fff;
   transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+}
+
+.transactions-expanded {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: auto;
+  padding: 1rem;
+  background: rgba(248, 250, 252, 0.98);
+}
+
+.transaction-list.dense {
+  gap: 0.55rem;
+}
+
+.transaction-card.table-like {
+  padding: 0.85rem 1rem;
+}
+
+.transaction-grid-row {
+  display: grid;
+  grid-template-columns: minmax(10rem, 1.5fr) 7rem 7rem minmax(9rem, 1fr) minmax(8rem, 1fr) auto;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.transaction-name span {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.76rem;
+}
+
+.category-chip {
+  justify-self: start;
+  border-radius: 999px;
+  padding: 0.34rem 0.62rem;
+  background: #eef2ff;
+  color: #4338ca;
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.category-chip.income {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.category-chip.expense {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.category-chip.transfer {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.subitem-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+}
+
+.subitem-preview span {
+  border-radius: 999px;
+  padding: 0.26rem 0.5rem;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.74rem;
+  font-weight: 800;
 }
 
 .transaction-card:hover {
@@ -475,6 +605,41 @@ label span {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.subitem-editor {
+  display: grid;
+  gap: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1rem;
+  background: #f8fafc;
+}
+
+.subitem-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.subitem-head span {
+  display: block;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.subitem-row {
+  display: grid;
+  grid-template-columns: minmax(7rem, 1fr) 7rem minmax(8rem, 1fr) minmax(8rem, 1fr) auto;
+  gap: 0.55rem;
+  align-items: center;
 }
 
 .type-switch,
@@ -683,6 +848,246 @@ label span {
   text-align: right;
 }
 
+.trash-sections {
+  display: grid;
+  gap: 1rem;
+}
+
+.trash-toolbar {
+  grid-template-columns: minmax(0, 1fr) 10rem auto auto;
+}
+
+.trash-hint {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.84rem;
+}
+
+.trash-section {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.trash-section h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.trash-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  border-radius: 1rem;
+  padding: 0.8rem;
+  background: #f8fafc;
+}
+
+.trash-card span {
+  display: block;
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+.trash-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.clear-button {
+  margin-left: 0;
+  align-self: end;
+  padding: 0.78rem 1rem;
+  border-radius: 12px;
+}
+
+.flow-board {
+  display: grid;
+  gap: 1rem;
+}
+
+.flow-orbit {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+  border-radius: 1.4rem;
+  padding: 1rem;
+  background: #f8fafc;
+}
+
+.flow-core,
+.flow-category-ball,
+.flow-star {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  border-radius: 999px;
+}
+
+.flow-core {
+  width: 8.8rem;
+  min-height: 8.8rem;
+  padding: 1rem;
+  background: #0f172a;
+  color: #fff;
+}
+
+.flow-core span,
+.flow-category-ball span {
+  font-size: 0.78rem;
+  opacity: 0.78;
+}
+
+.flow-rings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.flow-category {
+  display: grid;
+  gap: 0.55rem;
+  justify-items: center;
+}
+
+.flow-category-ball {
+  width: 6.6rem;
+  min-height: 6.6rem;
+  padding: 0.7rem;
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.flow-stars {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.28rem;
+  max-width: 8rem;
+}
+
+.flow-star {
+  width: 1.55rem;
+  height: 1.55rem;
+  background: #fff;
+  color: #475569;
+  font-size: 0.7rem;
+  font-weight: 900;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+.import-drop {
+  display: grid;
+  grid-template-columns: minmax(0, 16rem) 1fr;
+  gap: 1rem;
+  align-items: center;
+  border: 1px dashed #cbd5e1;
+  border-radius: 1.2rem;
+  padding: 1rem;
+  background: #f8fafc;
+}
+
+.import-drop span,
+.import-batch-head span {
+  display: block;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.import-batches {
+  display: grid;
+  gap: 1rem;
+}
+
+.import-batch {
+  display: grid;
+  gap: 0.8rem;
+  border-radius: 1.2rem;
+  padding: 1rem;
+  background: #f8fafc;
+}
+
+.import-batch-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.import-actions {
+  display: grid;
+  grid-template-columns: minmax(10rem, 1fr) auto auto auto;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.import-drafts {
+  display: grid;
+  gap: 0.55rem;
+  max-height: 32rem;
+  overflow: auto;
+  padding-right: 0.2rem;
+}
+
+.import-draft-row {
+  display: grid;
+  grid-template-columns: 2rem minmax(12rem, 1.4fr) 6.5rem 10rem 6rem minmax(8rem, 1fr) minmax(8rem, 1fr) minmax(14rem, 1.2fr);
+  gap: 0.45rem;
+  align-items: center;
+  border-radius: 0.9rem;
+  padding: 0.55rem;
+  background: #fff;
+}
+
+.checkbox-cell {
+  display: grid;
+  place-items: center;
+}
+
+.checkbox-cell input {
+  width: auto;
+}
+
+.raw-preview {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 0.6rem;
+}
+
+.raw-preview summary {
+  cursor: pointer;
+  color: #2563eb;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.import-table-wrap {
+  overflow: auto;
+}
+
+.import-table {
+  width: 100%;
+  min-width: 42rem;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.import-table th,
+.import-table td {
+  border-top: 1px solid #e2e8f0;
+  padding: 0.55rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.import-table th {
+  color: #64748b;
+  font-weight: 900;
+}
+
 @media (max-width: 1080px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
@@ -691,6 +1096,10 @@ label span {
   .side-column {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .management-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -709,7 +1118,15 @@ label span {
   .side-column,
   .transaction-form,
   .summary-strip,
-  .filter-bar {
+  .filter-bar,
+  .quick-search,
+  .trash-toolbar,
+  .transaction-grid-row,
+  .subitem-row,
+  .flow-orbit,
+  .import-drop,
+  .import-actions,
+  .import-draft-row {
     grid-template-columns: 1fr;
   }
 

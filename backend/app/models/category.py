@@ -15,6 +15,6 @@ class Category(Base):
     is_active = Column(Boolean, nullable=False, default=True)
     sort_order = Column(Integer, nullable=False, default=0)
     created_at = Column(DateTime, nullable=False, server_default=func.now())
+    deleted_at = Column(DateTime, nullable=True)
 
     parent = relationship("Category", remote_side=[id], backref="children")
-

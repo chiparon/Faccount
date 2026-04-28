@@ -78,8 +78,32 @@ export const api = {
       body: JSON.stringify(payload),
     });
   },
+  updateTransaction(id, payload) {
+    return request(`/transactions/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    });
+  },
   deleteTransaction(id) {
     return request(`/transactions/${id}`, {
+      method: "DELETE",
+    });
+  },
+  listTrash(params = {}) {
+    return request(withQuery("/trash", params));
+  },
+  restoreTrash(entityType, id) {
+    return request(`/trash/${entityType}/${id}/restore`, {
+      method: "POST",
+    });
+  },
+  permanentlyDeleteTrash(entityType, id) {
+    return request(`/trash/${entityType}/${id}`, {
+      method: "DELETE",
+    });
+  },
+  clearTrash(params = {}) {
+    return request(withQuery("/trash", params), {
       method: "DELETE",
     });
   },

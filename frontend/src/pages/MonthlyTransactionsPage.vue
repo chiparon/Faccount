@@ -23,7 +23,7 @@
         <div class="month-table">
           <div class="month-table-row month-table-head">
             <span>时间</span>
-            <span>标题</span>
+            <span>名称</span>
             <span>分类</span>
             <span>账户</span>
             <span>金额</span>

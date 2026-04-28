@@ -1,5 +1,5 @@
 <template>
-  <Panel title="分类管理" kicker="Categories" description="支持父子级分类" fill>
+  <Panel title="分类管理" kicker="Categories" description="支持父子级分类和 Trash 恢复" fill>
     <div class="category-scroll">
       <article v-for="item in rootCategories" :key="item.id" class="category-node">
         <div class="category-row">
@@ -134,10 +134,8 @@ async function submitCategory() {
   }
 }
 
-onMounted(loadCategories);
-
 async function deleteCategory(item) {
-  if (!window.confirm(`确认删除分类「${item.name}」吗？存在子分类或已被流水使用时不能删除。`)) {
+  if (!window.confirm(`确认删除分类「${item.name}」吗？删除后会进入 Trash，可恢复。`)) {
     return;
   }
 
@@ -145,11 +143,13 @@ async function deleteCategory(item) {
     error.value = "";
     message.value = "";
     await api.deleteCategory(item.id);
-    message.value = "分类已删除";
+    message.value = "分类已移入 Trash";
     await loadCategories();
     window.dispatchEvent(new CustomEvent("categories-updated"));
   } catch (err) {
     error.value = `删除分类失败：${err.message}`;
   }
 }
+
+onMounted(loadCategories);
 </script>

@@ -15,6 +15,7 @@ class AccountCreate(AccountBase):
 class AccountRead(AccountBase):
     id: int
     created_at: datetime
+    deleted_at: datetime | None = None
 
     class Config:
         orm_mode = True
